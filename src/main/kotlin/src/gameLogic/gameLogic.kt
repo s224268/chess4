@@ -384,7 +384,7 @@ fun evaluateKingSafety(board: Board, kingLocation: Location, isWhite: Boolean): 
     var score = 0
 
     score -= checkPenalty(board, kingLocation, isWhite)
-    score -= checkmatePenalty(board, isWhite)
+    score -= checkmatePenalty(board, kingLocation)
     score -= surroundedByFriendsScore(board, kingLocation)
     //println("surroundedByFriendsScore " + surroundedByFriendsScore(board, kingLocation))
 
@@ -454,16 +454,15 @@ fun checkPenalty(board: Board, kingLocation: Location, isWhite: Boolean): Int {
 
 }
 
-fun checkmatePenalty(board: Board, isWhite: Boolean): Int {
-    for (i in 0 .. 7) {
-        for (j in 0 .. 7) {
-            if (board.board[i][j]?.isWhite == isWhite && board.board[i][j]?.type == 'K') {
-                val kingLocation = Location(i, j)
-                if (isKingInCheck(board, kingLocation, isWhite) && !hasLegalMoves(board, isWhite)) {
-                    return -50000 // Large penalty
-                }
-            }
-        }
+fun checkmatePenalty(board: Board, kingLocation: Location): Int {
+    val piece = board.board[kingLocation.x][kingLocation.y]
+    if (piece == null) {
+        print("No king found at given location. ")
+        exitProcess(1)
+    }
+    val isWhite = piece!!.isWhite
+    if (isKingInCheck(board, kingLocation, isWhite) && !hasLegalMoves(board, isWhite)) {
+        return -50000 // Large penalty
     }
     return 0
 }

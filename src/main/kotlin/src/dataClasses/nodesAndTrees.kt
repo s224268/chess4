@@ -53,21 +53,19 @@ suspend fun evalBestMove(board: Board, depth: Int, isWhite: Boolean): Board {
 
             if (isWhite) {
                 val score = minimax(child, depth - 1, true, Int.MIN_VALUE, Int.MAX_VALUE)
+                child.children.clear() // saves massive amount of memory. A true keeper <3
                 if (score > bestScore) {
                     favoriteChild = child
                     bestScore = score
-                } else {
-                    child.children.clear() //MASSIVELY saves ram and prevents memory overflow
                 }
 
             } else {
 
                 val score = minimax(child, depth - 1, false, Int.MIN_VALUE, Int.MAX_VALUE)
+                child.children.clear()
                 if (score < bestScore) {
                     favoriteChild = child
                     bestScore = score
-                } else {
-                    child.children.clear()
                 }
             }
         }
