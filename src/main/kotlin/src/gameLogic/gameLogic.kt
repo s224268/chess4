@@ -2,6 +2,7 @@ package gameLogic
 
 import AI.results
 import dataClasses.*
+import view.printBoard
 import view.printMoves
 import java.util.EnumSet.range
 import javax.swing.text.Position
@@ -336,7 +337,6 @@ fun getWhiteAdvantage(board: Board): Int{
                         sum -= checkNumberOfPawnFriends(board = board, Location(i, j), isWhite = false)
                     }
                 }
-
                 /*
                 if (!piece.hasMoved) {
                     sum += 1

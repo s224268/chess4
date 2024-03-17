@@ -1,20 +1,18 @@
 package dataClasses
 
 import AI.results
-import gameLogic.getAllPossibleMoves
 import gameLogic.getLegalMoves
 import gameLogic.getWhiteAdvantage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import view.printBoard
-import view.printMoves
-import java.util.Collections.max
-import java.util.Collections.min
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.time.measureTime
 
 data class Node(
     val board: Board,
@@ -45,34 +43,54 @@ fun evalNode(node: Node) {
 suspend fun evalBestMove(board: Board, depth: Int, isWhite: Boolean): Board {
     var favoriteChild = Node(board = board)
     favoriteChild.setChildren(isWhite)
+    val favoriteChildren = mutableMapOf<Int,Node>()
     val jobs = mutableListOf<Job>()
+    val mutex = Mutex()
     val coroutineScope = CoroutineScope(Dispatchers.Default)
-    var bestScore: Int = if (isWhite) Int.MIN_VALUE else Int.MAX_VALUE
+
     favoriteChild.children.forEach{child ->
         val job = coroutineScope.launch {
 
+            val bestScore: AtomicInteger = if (isWhite) AtomicInteger(Int.MIN_VALUE) else AtomicInteger(Int.MAX_VALUE)
+            var localFavoriteChild = favoriteChild
             if (isWhite) {
-                val score = minimax(child, depth - 1, true, Int.MIN_VALUE, Int.MAX_VALUE)
+                val score = minimax(child, depth - 1, false, Int.MIN_VALUE, Int.MAX_VALUE)
                 child.children.clear() // saves massive amount of memory. A true keeper <3
-                if (score > bestScore) {
-                    favoriteChild = child
-                    bestScore = score
+                if (score > bestScore.get()) {
+                    localFavoriteChild = child
+                    bestScore.set(score)
                 }
 
             } else {
-                val score = minimax(child, depth - 1, false, Int.MIN_VALUE, Int.MAX_VALUE)
+
+                val score = minimax(child, depth - 1, true, Int.MIN_VALUE, Int.MAX_VALUE)
                 child.children.clear()
-                if (score < bestScore) {
-                    favoriteChild = child
-                    bestScore = score
+                if (score < bestScore.get()) {
+                    localFavoriteChild = child
+                    bestScore.set(score)
                 }
+            }
+            mutex.withLock {
+                favoriteChildren[bestScore.get()] = localFavoriteChild
             }
         }
         jobs.add(job)
     }
     jobs.forEach { it.join() }
+    if (isWhite){
+        val highestkey = favoriteChildren.maxBy { entry -> entry.key }
+        favoriteChild = favoriteChildren[highestkey.key]!!
+        println("Here the key is: " + highestkey.key)
+        favoriteChild.whiteAdvantage = highestkey.key
+    } else {
+        val minimumKey = favoriteChildren.minBy { entry -> entry.key }
+        favoriteChild = favoriteChildren[minimumKey.key]!!
+        println("Here the key is: " + minimumKey.key)
+        favoriteChild.whiteAdvantage = minimumKey.key
+    }
 
-    println("Potenital best score scenario found: $bestScore")
+
+    //println("Potential best score scenario found: $bestScore")
     print("This move has a score of: " + favoriteChild.whiteAdvantage)
     return favoriteChild.board
 }
@@ -84,7 +102,7 @@ fun minimax(node: Node, depth: Int, maximizing: Boolean, alpha: Int, beta: Int):
     }
 
     node.setChildren(maximizing)
-    if (node.children.isEmpty()) {
+    if(node.children.isEmpty()){
         evalNode(node)
         return node.whiteAdvantage
     }
@@ -94,16 +112,32 @@ fun minimax(node: Node, depth: Int, maximizing: Boolean, alpha: Int, beta: Int):
 
 
     if (maximizing) {
-        var maxEval: Int = Int.MIN_VALUE
+        var maxEval: Int = -1000069
+        if (node.children.size == 0){
+            printBoard(node.board)
+            println("Gooner alarm 4")
+        }
         for (child in node.children) {
             val eval = minimax(child, depth - 1, false, a, b)
+
+            //println("EVAL IS: " + eval)
             maxEval = max(maxEval, eval)
+            if (maxEval == -1000069){
+                println("Gooner alarm 1")
+            }
+            //println("MAXEVAL IS: " + maxEval)
             if (maxEval >= b) {
                 break
             }
-            a = max(a, eval)
+            a = max(a, maxEval)
+        }
+        if (maxEval == -1000069){
+            println("Gooner alarm 2")
         }
         node.whiteAdvantage = maxEval
+        if (node.whiteAdvantage == -1000069){
+            println("Gooner alarm 3")
+        }
         return maxEval
     } else {
         var minEval: Int = Int.MAX_VALUE
@@ -113,7 +147,7 @@ fun minimax(node: Node, depth: Int, maximizing: Boolean, alpha: Int, beta: Int):
             if (minEval <= a) {
                 break
             }
-            b = min(b, eval)
+            b = min(b, minEval)
         }
         node.whiteAdvantage = minEval
         return minEval
