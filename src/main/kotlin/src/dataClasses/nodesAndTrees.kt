@@ -60,7 +60,6 @@ suspend fun evalBestMove(board: Board, depth: Int, isWhite: Boolean): Board {
                 }
 
             } else {
-
                 val score = minimax(child, depth - 1, false, Int.MIN_VALUE, Int.MAX_VALUE)
                 child.children.clear()
                 if (score < bestScore) {
@@ -85,6 +84,10 @@ fun minimax(node: Node, depth: Int, maximizing: Boolean, alpha: Int, beta: Int):
     }
 
     node.setChildren(maximizing)
+    if (node.children.isEmpty()) {
+        evalNode(node)
+        return node.whiteAdvantage
+    }
 
     var a = alpha
     var b = beta

@@ -2,6 +2,7 @@ package gameLogic
 
 import AI.results
 import dataClasses.*
+import view.printMoves
 import java.util.EnumSet.range
 import javax.swing.text.Position
 import kotlin.math.max
@@ -335,6 +336,7 @@ fun getWhiteAdvantage(board: Board): Int{
                         sum -= checkNumberOfPawnFriends(board = board, Location(i, j), isWhite = false)
                     }
                 }
+
                 /*
                 if (!piece.hasMoved) {
                     sum += 1
@@ -448,7 +450,7 @@ fun isKingInCheck(board: Board, kingLocation: Location, isWhite: Boolean): Boole
 
 fun checkPenalty(board: Board, kingLocation: Location, isWhite: Boolean): Int {
     return if (isKingInCheck(board, kingLocation, isWhite)) {
-        10000
+        15
     }
     else 0
 

@@ -67,7 +67,7 @@ fun getInitialBoard(): Board {
     board.board[1][0] = Piece(type = 'N', isWhite = true, value = 30, moveStrategy = ::getKnightMoves)
     board.board[2][0] = Piece(type = 'B', isWhite = true, value = 30, moveStrategy = ::getBishopMoves)
     board.board[3][0] = Piece(type = 'Q', isWhite = true, value = 90, moveStrategy = ::getQueenMoves)
-    board.board[4][0] = Piece(type = 'K', isWhite = true, value = 200, moveStrategy = ::getKingMoves)   // Black king
+    board.board[4][0] = Piece(type = 'K', isWhite = true, value = 0, moveStrategy = ::getKingMoves)   // Black king
     board.board[5][0] = Piece(type = 'B', isWhite = true, value = 30, moveStrategy = ::getBishopMoves) // Black bishop
     board.board[6][0] = Piece(type = 'N', isWhite = true, value = 30, moveStrategy = ::getKnightMoves) // Black knight
     board.board[7][0] = Piece(type = 'R', isWhite = true, value = 50, moveStrategy = ::getRookMoves)   // Black rook
@@ -84,7 +84,7 @@ fun getInitialBoard(): Board {
     board.board[1][7] = Piece(type = 'N', isWhite = false, value = 30, moveStrategy = ::getKnightMoves)
     board.board[2][7] = Piece(type = 'B', isWhite = false, value = 30, moveStrategy = ::getBishopMoves)
     board.board[3][7] = Piece(type = 'Q', isWhite = false, value = 90, moveStrategy = ::getQueenMoves)
-    board.board[4][7] = Piece(type = 'K', isWhite = false, value = 200, moveStrategy = ::getKingMoves)    // White king
+    board.board[4][7] = Piece(type = 'K', isWhite = false, value = 0, moveStrategy = ::getKingMoves)    // White king
     board.board[5][7] = Piece(type = 'B', isWhite = false, value = 30, moveStrategy = ::getBishopMoves)  // White bishop
     board.board[6][7] = Piece(type = 'N', isWhite = false, value = 30, moveStrategy = ::getKnightMoves)  // White knight
     board.board[7][7] = Piece(type = 'R', isWhite = false, value = 50, moveStrategy = ::getRookMoves)    // White rook
