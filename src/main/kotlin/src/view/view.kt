@@ -62,6 +62,7 @@ fun whichMove(possibleMoves : List<Location>): Location {
 
 fun startText(){
     println("You are playing chess, but with slightly simplified rules. There is no en pessant or Castling, and all pawn promotions are to queens.")
+    println("You may be able to make illegal moves. It is up to you to follow the rules of chess and make sure not to leave your king in check")
     println("When selecting a piece to move, write using chess notation, such as 'B2' \nThen, when selecting where to move the piece, write either the number from the list (e.g. '3'), or the location you want to move to, e.g. 'B4'")
 
     println("Please note that colors may look inverted in dark mode. This is a white queen: ♔")

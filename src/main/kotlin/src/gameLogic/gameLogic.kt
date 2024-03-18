@@ -196,56 +196,56 @@ fun getKingMoves(board: Board, location: Location): MutableList<Location> {
 
     //SOUTHEAST
     if ((maxOf(location.x + 1, location.y + 1) < 8)) {
-        if (board.board[location.x + 1][location.y + 1]?.isWhite != piece?.isWhite) {
+        if (board.board[location.x + 1][location.y + 1]?.isWhite != piece.isWhite) {
             possibleMoves.add(Location(x = location.x + 1, y = location.y + 1))
         }
     }
 
     //SOUTH
     if ((location.y + 1) < 8) {
-        if (board.board[location.x][location.y + 1]?.isWhite != piece?.isWhite) {
+        if (board.board[location.x][location.y + 1]?.isWhite != piece.isWhite) {
             possibleMoves.add(Location(x = location.x, y = location.y + 1))
         }
     }
 
     //SOUTHWEST
     if (location.x - 1 >= 0 && location.y + 1 < 8) {
-        if (board.board[location.x - 1][location.y + 1]?.isWhite != piece?.isWhite) {
+        if (board.board[location.x - 1][location.y + 1]?.isWhite != piece.isWhite) {
             possibleMoves.add(Location(x = location.x - 1, y = location.y + 1))
         }
     }
 
     //WEST
     if ((location.x - 1) >= 0) {
-        if (board.board[location.x - 1][location.y]?.isWhite != piece?.isWhite) {
+        if (board.board[location.x - 1][location.y]?.isWhite != piece.isWhite) {
             possibleMoves.add(Location(x = location.x - 1, y = location.y))
         }
     }
 
     //NORTHWEST
     if ((minOf(location.x - 1, location.y - 1) >= 0)) {
-        if (board.board[location.x - 1][location.y - 1]?.isWhite != piece?.isWhite) {
+        if (board.board[location.x - 1][location.y - 1]?.isWhite != piece.isWhite) {
             possibleMoves.add(Location(x = location.x - 1, y = location.y - 1))
         }
     }
 
     //NORTH
     if ((location.y - 1) >= 0) {
-        if (board.board[location.x][location.y - 1]?.isWhite != piece?.isWhite) {
+        if (board.board[location.x][location.y - 1]?.isWhite != piece.isWhite) {
             possibleMoves.add(Location(x = location.x, y = location.y - 1))
         }
     }
 
     //NORTHEAST
     if ((location.x + 1 < 8 && location.y - 1 > -1)) {
-        if (board.board[location.x + 1][location.y - 1]?.isWhite != piece?.isWhite) {
+        if (board.board[location.x + 1][location.y - 1]?.isWhite != piece.isWhite) {
             possibleMoves.add(Location(x = location.x + 1, y = location.y - 1))
         }
     }
 
     //EAST
     if ((location.x + 1) < 8) {
-        if (board.board[location.x + 1][location.y]?.isWhite != piece?.isWhite) {
+        if (board.board[location.x + 1][location.y]?.isWhite != piece.isWhite) {
             possibleMoves.add(Location(x = location.x + 1, y = location.y))
         }
     }
@@ -312,6 +312,7 @@ fun getWhiteAdvantage(board: Board): Int{
             if (piece.isWhite){ //This should be reduceable in some way
                 if (piece.type == 'K') {
                     sum += evaluateKingSafety(board, Location(i, j), true)
+                    sum += piece.value
                 }
                 else {
                     sum += piece.value
@@ -323,6 +324,7 @@ fun getWhiteAdvantage(board: Board): Int{
             } else {
                 if (piece.type == 'K') {
                     sum -= evaluateKingSafety(board, Location(i, j), false)
+                    sum -= piece.value
                 }
                 else {
                     sum -= piece.value
