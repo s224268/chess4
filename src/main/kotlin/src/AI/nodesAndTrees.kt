@@ -117,32 +117,21 @@ fun minimax(node: Node, depth: Int, maximizing: Boolean, alpha: Int, beta: Int):
 
 
     if (maximizing) {
-        var maxEval: Int = -1000069
-        if (node.children.size == 0){
-            printBoard(node.board)
-            println("Gooner alarm 4")
-        }
+        var maxEval: Int = Int.MIN_VALUE
+
         for (child in node.children) {
             val eval = minimax(child, depth - 1, false, a, b)
 
             //println("EVAL IS: " + eval)
             maxEval = max(maxEval, eval)
-            if (maxEval == -1000069){
-                println("Gooner alarm 1")
-            }
+
             //println("MAXEVAL IS: " + maxEval)
             if (maxEval >= b) {
                 break
             }
             a = max(a, maxEval)
         }
-        if (maxEval == -1000069){
-            println("Gooner alarm 2")
-        }
         node.whiteAdvantage = maxEval
-        if (node.whiteAdvantage == -1000069){
-            println("Gooner alarm 3")
-        }
         return maxEval
     } else {
         var minEval: Int = Int.MAX_VALUE
