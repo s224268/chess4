@@ -43,7 +43,7 @@ fun evalNode(node: Node) {
 /**
  * I made some lovely concurrency here. Not totally optimal, but really simple way to split it up. For very simple
  * positions, it won't use all cores and for complicated positions it may try to run more coroutines (read: Threads)
- * than what is available on the computer. However, this shouldnt be a significant slowdown.
+ * than what is available on the computer. However, this shouldn't be a significant slowdown.
  */
 suspend fun evalBestMove(board: Board, depth: Int, isWhite: Boolean): Board {
     var favoriteChild = Node(board = board)
