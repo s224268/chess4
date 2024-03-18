@@ -312,19 +312,17 @@ fun getWhiteAdvantage(board: Board): Int{
             if (piece.isWhite){ //This should be reduceable in some way
                 if (piece.type == 'K') {
                     sum += evaluateKingSafety(board, Location(i, j), true)
-                    sum += piece.value
                 }
                 else {
-                    sum += piece.value
                     if (piece.type == 'P') {
                         sum += checkNumberOfPawnFriends(board = board, Location(i, j), isWhite = true)
                     }
                 }
+                sum += piece.value
 
             } else {
                 if (piece.type == 'K') {
                     sum -= evaluateKingSafety(board, Location(i, j), false)
-                    sum -= piece.value
                 }
                 else {
                     sum -= piece.value
@@ -332,6 +330,7 @@ fun getWhiteAdvantage(board: Board): Int{
                         sum -= checkNumberOfPawnFriends(board = board, Location(i, j), isWhite = false)
                     }
                 }
+                sum -= piece.value
             }
         }
     }
@@ -379,7 +378,7 @@ fun evaluateKingSafety(board: Board, kingLocation: Location, isWhite: Boolean): 
     val kingInCheck = isKingInCheck(board = board, isWhite = isWhite, kingLocation = kingLocation)
     if (kingInCheck){ //These are combined because isKingInCheck was 25+20+30% of all processing time. Thereby, any reduction is significant
         score -= 15
-        score -= checkmatePenalty(board, kingLocation)
+        //score -= checkmatePenalty(board, kingLocation)
     }
     //score -= checkPenalty(board, kingLocation, isWhite) //ifkingincheck
     score -= surroundedByFriendsScore(board, kingLocation)
