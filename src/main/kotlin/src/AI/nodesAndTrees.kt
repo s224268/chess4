@@ -83,10 +83,10 @@ suspend fun evalBestMove(board: Board, depth: Int, isWhite: Boolean): Board {
     }
     jobs.forEach { it.join() }
     if (isWhite){
-        val highestkey = favoriteChildren.maxBy { entry -> entry.key }
-        favoriteChild = favoriteChildren[highestkey.key]!!
+        val maxKey = favoriteChildren.maxBy { entry -> entry.key }
+        favoriteChild = favoriteChildren[maxKey.key]!!
         //println("Here the key is: " + highestkey.key)
-        favoriteChild.whiteAdvantage = highestkey.key
+        favoriteChild.whiteAdvantage = maxKey.key
     } else {
         val minimumKey = favoriteChildren.minBy { entry -> entry.key }
         favoriteChild = favoriteChildren[minimumKey.key]!!

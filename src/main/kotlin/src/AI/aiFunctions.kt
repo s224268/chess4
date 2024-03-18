@@ -7,6 +7,7 @@ import dataClasses.Piece
 import gameLogic.getAllMovesFromPiece
 import gameLogic.move
 
+//These functions have largely been deprecated and moved into nodesAndTrees as part of the code for performance reasons
 fun actions(board: Board /* Formally ACTIONS(S)*/): List<Move> {
 
     var piece: Piece?
