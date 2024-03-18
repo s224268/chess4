@@ -39,11 +39,11 @@ suspend fun main() {
             move(board, pieceToMove, desiredMove)
 
             clearScreen()
-            println("[AI is thinking]")
             printBoard(board)
 
         }
         else {
+            println("[AI is thinking]")
             board = evalBestMove(board = board.copyBoard(isItWhitesTurn = false), depth = depth, isWhite = false)
         }
 
