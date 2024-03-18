@@ -28,7 +28,7 @@ data class Node(
 
         for (move: Move in allPossibleMoves) {
             val newChild = Node(
-                board = results(this.board.copyBoard(isItWhitesTurn = isWhite), move),
+                board = results(this.board.copyBoard(), move),
                 children = mutableListOf()
             )
             children.add(newChild)

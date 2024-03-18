@@ -56,5 +56,6 @@ fun terminalTest(board: Board): Boolean?{
  * IDK why you'd use this, but it's in the task, so it's here
  */
 fun players(board: Board): Boolean{
-    return board.whitesTurn
+    //return board.whitesTurn
+    return false
 }

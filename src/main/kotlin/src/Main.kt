@@ -44,7 +44,7 @@ suspend fun main() {
         }
         else {
             println("[AI is thinking]")
-            board = evalBestMove(board = board.copyBoard(isItWhitesTurn = false), depth = depth, isWhite = false)
+            board = evalBestMove(board = board.copyBoard(), depth = depth, isWhite = false)
         }
 
         whiteNow = !whiteNow

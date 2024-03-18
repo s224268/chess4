@@ -24,8 +24,7 @@ data class Player(
 )
 
 data class Board(
-    val board: Array<Array<Piece?>>,
-    val whitesTurn: Boolean
+    val board: Array<Array<Piece?>>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -40,11 +39,11 @@ data class Board(
         return board.contentDeepHashCode()
     }
 
-    fun copyBoard(isItWhitesTurn: Boolean): Board {
+    fun copyBoard(): Board {
         val newBoard = Array(board.size) { i ->
             board[i].clone() // Clone the inner arrays
         }
-        return Board(newBoard, isItWhitesTurn)
+        return Board(newBoard)
     }
 }
 
@@ -52,7 +51,7 @@ data class Board(
 
 fun getEmptyBoard(): Board {
     return Board(
-        board = Array(8) { Array(8) { null } }, whitesTurn = true
+        board = Array(8) { Array(8) { null } }
     )
 }
 

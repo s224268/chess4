@@ -475,7 +475,7 @@ fun hasLegalMoves(board: Board, isWhite: Boolean): Boolean {
                 val currentLocation = Location(i, j)
                 val possibleMoves = piece.moveStrategy(board, currentLocation)
                 for (move in possibleMoves) {
-                    val simulatedBoard = board.copyBoard(isWhite)
+                    val simulatedBoard = board.copyBoard()
                     move(simulatedBoard, currentLocation, move)
                     val kingLocation = findPieceLocation(simulatedBoard, isWhite, 'K')
                     if (kingLocation != null && !isKingInCheck(simulatedBoard, kingLocation, isWhite)) {
@@ -506,7 +506,7 @@ fun getLegalMoves(board: Board, isWhite: Boolean): MutableList<Move> {
     val allPossibleMoves = getAllPossibleMoves(board, isWhite)
 
     for (move in allPossibleMoves) {
-        val simulatedBoard = board.copyBoard(isWhite)
+        val simulatedBoard = board.copyBoard()
         move(simulatedBoard, move.start, move.end)
         val kingLocation = findPieceLocation(simulatedBoard, isWhite, 'K') ?: continue
 
