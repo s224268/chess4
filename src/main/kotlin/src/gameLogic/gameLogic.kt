@@ -286,10 +286,10 @@ fun move(board: Board, previousLocation: Location, nextLocation: Location) {
             if (piece.type == 'P') {
                 board.board[nextLocation.x][nextLocation.y] = Piece(type = 'Q', isWhite = piece.isWhite, value = 90, moveStrategy = ::getQueenMoves)
             }
-            board.board[nextLocation.x][nextLocation.y] = board.board[previousLocation.x][previousLocation.y]
+            board.board[nextLocation.x][nextLocation.y] = piece
         }
         else {
-            board.board[nextLocation.x][nextLocation.y] = board.board[previousLocation.x][previousLocation.y]
+            board.board[nextLocation.x][nextLocation.y] = piece
         }
         board.board[previousLocation.x][previousLocation.y] = null
     }
@@ -365,10 +365,11 @@ fun getPieceValue(piece: Piece?): Int {
 
 fun getAllPossibleMoves(board: Board, isWhite: Boolean): MutableList<Move> {
     val allPossibleMoves = mutableListOf<Move>()
+    var piece : Piece?
     for (i in 0 .. 7) {
         for (j in 0 .. 7) {
             val currentLocation = Location(i, j)
-            val piece = board.board[i][j]
+            piece = board.board[i][j]
             if (piece != null && piece.isWhite == isWhite) {
                 val potentialMoves = piece.moveStrategy(board, currentLocation)
                 for (endLocation in potentialMoves) {
@@ -383,10 +384,15 @@ fun getAllPossibleMoves(board: Board, isWhite: Boolean): MutableList<Move> {
 }
 
 fun evaluateKingSafety(board: Board, kingLocation: Location, isWhite: Boolean): Int {
+
     var score = 0
 
-    score -= checkPenalty(board, kingLocation, isWhite)
-    score -= checkmatePenalty(board, kingLocation)
+    val kingInCheck = isKingInCheck(board = board, isWhite = isWhite, kingLocation = kingLocation)
+    if (kingInCheck){ //These are combined because isKingInCheck was 25+20+30% of all processing time. Thereby, any reduction is significant
+        score -= 15
+        score -= checkmatePenalty(board, kingLocation)
+    }
+    //score -= checkPenalty(board, kingLocation, isWhite) //ifkingincheck
     score -= surroundedByFriendsScore(board, kingLocation)
     //println("surroundedByFriendsScore " + surroundedByFriendsScore(board, kingLocation))
 
@@ -394,7 +400,7 @@ fun evaluateKingSafety(board: Board, kingLocation: Location, isWhite: Boolean): 
 }
 
 fun checkNumberOfPawnFriends(board: Board, pawnLocation: Location, isWhite: Boolean): Int {
-    var score = 0
+    var score : Int = 0
 
     val possibleFriendLocations: List<Pair<Int, Int>> = listOf(
         Pair(-1,-1), Pair(-1,1),
@@ -446,8 +452,12 @@ fun surroundedByFriendsScore(board: Board, kingLocation: Location): Int {
 fun isKingInCheck(board: Board, kingLocation: Location, isWhite: Boolean): Boolean {
     val otherPlayerNextMoves = getAllPossibleMoves(board = board, isWhite = !isWhite).map { it.end }
     return otherPlayerNextMoves.contains(kingLocation)
+
 }
 
+/**
+ * Deprecated for performance reasons
+*/
 fun checkPenalty(board: Board, kingLocation: Location, isWhite: Boolean): Int {
     return if (isKingInCheck(board, kingLocation, isWhite)) {
         15
@@ -457,13 +467,13 @@ fun checkPenalty(board: Board, kingLocation: Location, isWhite: Boolean): Int {
 }
 
 fun checkmatePenalty(board: Board, kingLocation: Location): Int {
-    val piece = board.board[kingLocation.x][kingLocation.y]
+    val piece = board.board[kingLocation.x][kingLocation.y] //TODO: Could this be removed?
     if (piece == null) {
         print("No king found at given location. ")
         exitProcess(1)
     }
-    val isWhite = piece!!.isWhite
-    if (isKingInCheck(board, kingLocation, isWhite) && !hasLegalMoves(board, isWhite)) {
+    val isWhite = piece.isWhite
+    if (!hasLegalMoves(board, isWhite)){
         return -50000 // Large penalty
     }
     return 0

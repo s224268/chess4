@@ -43,7 +43,6 @@ suspend fun main() {
             move(board, pieceToMove, desiredMove)
         }
         else {
-            //val isKingInCheck = isKingInCheck(board, Location(4,7), false)
             board = evalBestMove(board = board.copyBoard(isItWhitesTurn = false), depth = 5, isWhite = false)
         }
 

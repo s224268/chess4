@@ -10,7 +10,6 @@ data class Piece (
     val type: Char,
     val isWhite: Boolean,
     val value: Int,
-    val hasMoved: Boolean = false,
     val moveStrategy: (Board, Location) -> MutableList<Location>
 )
 
@@ -42,11 +41,8 @@ data class Board(
     }
 
     fun copyBoard(isItWhitesTurn: Boolean): Board {
-        // Create a deep copy
         val newBoard = Array(board.size) { i ->
-            Array(board[i].size) { j ->
-                board[i][j]?.copy()
-            }
+            board[i].clone() // Clone the inner arrays
         }
         return Board(newBoard, isItWhitesTurn)
     }
