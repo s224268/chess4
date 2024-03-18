@@ -2,29 +2,25 @@ import dataClasses.*
 import gameLogic.*
 import view.*
 
-//TIP Press <shortcut raw="SHIFT"/> twice to open the Search Everywhere dialog and type <b>show whitespaces</b>,
-// then press <shortcut raw="ENTER"/>. You can now see whitespace characters in your code.
+
 suspend fun main() {
     var board = getInitialBoard()
-    //val whitePlayer = createPlayer(isWhite = true, board = board)
-    //val blackPlayer = createPlayer(isWhite = false, board = board)
-    //val blackAI = true
     var whiteNow = true
+
+    startText()
+
     while (true){
+        print("Current player is ")
+        if (whiteNow) {
+            println("white")
+        } else {
+            println("black")
+        }
+
         if (whiteNow) {
             clearScreen()
 
-            /*val allPossibleDestinations = getAllPossibleMoves(board, board.whitesTurn).map { it.end }
-            print("All ")
-            printMoves(allPossibleDestinations)
-            print("\n\n\n")*/
 
-            print("Current player is ")
-            if (whiteNow) {
-                print("white")
-            } else {
-                print("black")
-            }
             printBoard(board)
 
             var pieceToMove = Location(0, 0)
@@ -41,6 +37,10 @@ suspend fun main() {
 
             val desiredMove = whichMove(possibleDestinations)
             move(board, pieceToMove, desiredMove)
+            clearScreen()
+            println("[AI is thinking]")
+            printBoard(board)
+
         }
         else {
             board = evalBestMove(board = board.copyBoard(isItWhitesTurn = false), depth = 5, isWhite = false)

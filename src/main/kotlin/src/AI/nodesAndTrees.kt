@@ -80,12 +80,12 @@ suspend fun evalBestMove(board: Board, depth: Int, isWhite: Boolean): Board {
     if (isWhite){
         val highestkey = favoriteChildren.maxBy { entry -> entry.key }
         favoriteChild = favoriteChildren[highestkey.key]!!
-        println("Here the key is: " + highestkey.key)
+        //println("Here the key is: " + highestkey.key)
         favoriteChild.whiteAdvantage = highestkey.key
     } else {
         val minimumKey = favoriteChildren.minBy { entry -> entry.key }
         favoriteChild = favoriteChildren[minimumKey.key]!!
-        println("Here the key is: " + minimumKey.key)
+        //println("Here the key is: " + minimumKey.key)
         favoriteChild.whiteAdvantage = minimumKey.key
     }
 

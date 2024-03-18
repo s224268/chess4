@@ -6,19 +6,11 @@ import dataClasses.Location
 fun printBoard(board: Board) {
     //clearScreen()
 
-    println("\nPlease note that piece colors can look inverted in dark mode\n")
     print("\t")
     for (i in 0..7){
         print( 'A' + i + "\t")
     }
-    /*
-    println()
-    print("\t")
-    for (i in 0..7){
-        print(i.toString() + "\t")
-    }
 
-     */
     println()
     for (y in 0..7){
         print((y+1).toString() + "\t")
@@ -64,9 +56,20 @@ fun whichMove(possibleMoves : List<Location>): Location {
     if (input[0].isLetter()){ //We allow notation or number
         return chessNotationToLocation(input)
     }
+
     return possibleMoves[input.toInt()-1]
 }
 
+fun startText(){
+    println("You are playing chess, but with slightly simplified rules. There is no en pessant or Castling, and all pawn promotions are to queens.")
+    println("When selecting a piece to move, write using chess notation, such as 'B2' \nThen, when selecting where to move the piece, write either the number from the list (e.g. '3'), or the location you want to move to, e.g. 'B4'")
+
+    println("Please note that colors may look inverted in dark mode. This is a white queen: ♔")
+    println("Press enter to continue")
+    readln()
+    clearScreen()
+}
+
 fun clearScreen(){
-    println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 }

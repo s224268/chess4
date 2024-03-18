@@ -81,7 +81,7 @@ fun getRookMoves(board: Board, location: Location): MutableList<Location> {
     val possibleMoves = mutableListOf<Location>()
     //North
     for (i in 1..8) { //TODO: 7?
-        if (location.y - i !in 0..7) { //TODO: This could be optimized. y-i<0
+        if (location.y - i < 0) { //TODO: This could be optimized. y-i<0
             break
         }
         if (board.board[location.x][location.y - i]?.isWhite != piece?.isWhite) {
@@ -94,7 +94,7 @@ fun getRookMoves(board: Board, location: Location): MutableList<Location> {
 
     //East
     for (i in 1..8) { //TODO: 7?
-        if (location.x + i !in 0..7) { //TODO: This could be optimized. y-i<0
+        if (location.x + i > 7) {
             break
         }
         if (board.board[location.x + i][location.y]?.isWhite != piece?.isWhite) {
@@ -107,7 +107,7 @@ fun getRookMoves(board: Board, location: Location): MutableList<Location> {
 
     //South
     for (i in 1..8) { //TODO: 7?
-        if (location.y + i !in 0..7) { //TODO: This could be optimized. y-i<0
+        if (location.y + i > 7) {
             break
         }
         if (board.board[location.x][location.y + i]?.isWhite != piece?.isWhite) {
@@ -120,7 +120,7 @@ fun getRookMoves(board: Board, location: Location): MutableList<Location> {
 
     //West
     for (i in 1..8) { //TODO: 7?
-        if (location.x - i !in 0..7) { //TODO: This could be optimized. y-i<0
+        if (location.x - i < 0) { //TODO: This could be optimized. y-i<0
             break
         }
         if (board.board[location.x - i][location.y]?.isWhite != piece?.isWhite) {
@@ -138,7 +138,7 @@ fun getBishopMoves(board: Board, location: Location): MutableList<Location> {
 
     // First we move northwest (towards (0,0))
     for (i in 1..7) {
-        if (location.x - i !in 0..7 || location.y - i !in 0..7) {
+        if (location.x - i < 0 || location.y - i < 0) {
             break
         }
         if (board.board[location.x - i][location.y - i]?.isWhite != piece?.isWhite) {
@@ -151,7 +151,7 @@ fun getBishopMoves(board: Board, location: Location): MutableList<Location> {
 
     // Now we move southeast
     for (i in 1..7) {
-        if (location.x + i !in 0..7 || location.y + i !in 0..7) {
+        if (location.x + i > 7 || location.y + i > 7) {
             break
         }
         if (board.board[location.x + i][location.y + i]?.isWhite != piece?.isWhite) {
@@ -164,7 +164,7 @@ fun getBishopMoves(board: Board, location: Location): MutableList<Location> {
 
     // Northeast
     for (i in 1..7) {
-        if (location.x + i !in 0..7 || location.y - i !in 0..7) {
+        if (location.x + i > 7 || location.y - i < 0) {
             break
         }
         if (board.board[location.x + i][location.y - i]?.isWhite != piece?.isWhite) {
@@ -177,7 +177,7 @@ fun getBishopMoves(board: Board, location: Location): MutableList<Location> {
 
     // Southwest
     for (i in 1..7) {
-        if (location.x - i !in 0..7 || location.y + i !in 0..7) {
+        if (location.x - i < 0 || location.y + i > 7) {
             break
         }
         if (board.board[location.x - i][location.y + i]?.isWhite != piece?.isWhite) {
@@ -244,7 +244,7 @@ fun getKingMoves(board: Board, location: Location): MutableList<Location> {
     }
 
     //EAST
-    if ((location.x + 1) < 8) { //TODO: FIX
+    if ((location.x + 1) < 8) {
         if (board.board[location.x + 1][location.y]?.isWhite != piece?.isWhite) {
             possibleMoves.add(Location(x = location.x + 1, y = location.y))
         }
@@ -270,8 +270,7 @@ fun getKnightMoves(board: Board, location: Location): MutableList<Location> {
         if (desX < 0 || desY < 0 || desX > 7 || desY > 7) {
             continue
         }
-        val destination = board.board[desX][desY]
-        if (board.board[desX][desY]?.isWhite != piece?.isWhite) {
+        if (board.board[desX][desY]?.isWhite != piece.isWhite) {
             possibleMoves.add(Location(desX, desY))
         }
     }
@@ -279,7 +278,7 @@ fun getKnightMoves(board: Board, location: Location): MutableList<Location> {
 }
 
 fun move(board: Board, previousLocation: Location, nextLocation: Location) {
-    //print("$previousLocation, $nextLocation")
+
     val piece = board.board[previousLocation.x][previousLocation.y]
     if (piece != null) {
         if (previousLocation.y == 0 || previousLocation.y == 7) {
@@ -302,7 +301,7 @@ fun move(board: Board, previousLocation: Location, nextLocation: Location) {
  */
 fun getWhiteAdvantage(board: Board): Int{
     var sum = 0
-    var piece: Piece? = null
+    var piece: Piece?
 
     for (i in 0..7){
         for (j in 0..7){
@@ -321,12 +320,6 @@ fun getWhiteAdvantage(board: Board): Int{
                     }
                 }
 
-                /*
-                if (!piece.hasMoved) {
-                    sum -= 1
-                }
-
-                 */
             } else {
                 if (piece.type == 'K') {
                     sum -= evaluateKingSafety(board, Location(i, j), false)
@@ -337,12 +330,6 @@ fun getWhiteAdvantage(board: Board): Int{
                         sum -= checkNumberOfPawnFriends(board = board, Location(i, j), isWhite = false)
                     }
                 }
-                /*
-                if (!piece.hasMoved) {
-                    sum += 1
-                }
-
-                 */
             }
         }
     }
