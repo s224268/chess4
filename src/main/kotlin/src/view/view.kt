@@ -60,15 +60,16 @@ fun whichMove(possibleMoves : List<Location>): Location {
     return possibleMoves[input.toInt()-1]
 }
 
-fun startText(){
-    println("You are playing chess, but with slightly simplified rules. There is no en pessant or Castling, and all pawn promotions are to queens.")
+fun startText(): Int{
+    println("You are playing chess, but with slightly simplified rules. There is no en passant, draw, or Castling, and all pawn promotions are to queens.")
     println("You may be able to make illegal moves. It is up to you to follow the rules of chess and make sure not to leave your king in check")
     println("When selecting a piece to move, write using chess notation, such as 'B2' \nThen, when selecting where to move the piece, write either the number from the list (e.g. '3'), or the location you want to move to, e.g. 'B4'")
-
-    println("Please note that colors may look inverted in dark mode. This is a white queen: ♔")
-    println("Press enter to continue")
-    readln()
+    println("Please note that colors may look inverted in dark mode. This is a white queen: ♔\n")
+    println("Please enter your desired search depth. 5 is heavily recommended for most systems")
+    val userInput = readlnOrNull()// handle empty input (optional)
+    val depth = userInput?.toInt()
     clearScreen()
+    return depth!!
 }
 
 fun clearScreen(){

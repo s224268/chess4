@@ -7,7 +7,7 @@ suspend fun main() {
     var board = getInitialBoard()
     var whiteNow = true
 
-    startText()
+    val depth = startText()
 
     while (true){
         print("Current player is ")
@@ -37,13 +37,14 @@ suspend fun main() {
 
             val desiredMove = whichMove(possibleDestinations)
             move(board, pieceToMove, desiredMove)
+
             clearScreen()
             println("[AI is thinking]")
             printBoard(board)
 
         }
         else {
-            board = evalBestMove(board = board.copyBoard(isItWhitesTurn = false), depth = 5, isWhite = false)
+            board = evalBestMove(board = board.copyBoard(isItWhitesTurn = false), depth = depth, isWhite = false)
         }
 
         whiteNow = !whiteNow
